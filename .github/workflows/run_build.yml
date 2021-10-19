@@ -15,7 +15,25 @@ jobs:
 
       - name: Get last latest tag
         id: latest-tag
-        run: echo '::set-output name=TAG::$(git describe --abbrev=0 --tags)'
+        run: |
+          echo '::set-output name=TAG::$(git describe --abbrev=0 --tags)'
+          echo '::set-output name=OTHER::someoutput'
+
+      - name: ls -l
+        run: ls -l
 
       - name: Show last tag
-        run: echo "The last tag is ${{ steps.latest-tag.outputs.TAG }}"
+        run: |
+          echo "The last tag is ${{ steps.latest-tag.outputs.TAG }}"
+          echo "The other output is ${{ steps.latest-tag.outputs.OTHER }}"
+
+      - name: touch README.md
+        run: echo "$(date)-${{ steps.latest-tag.outputs.TAG }}" > README.md
+
+      - name: Commit README.md
+        run: |
+          git config --global user.name 'Autobot'
+          git config --global user.email 'autobot@example.com'
+          git add README.md
+          git commit -m"Automatic commit"
+          git push
