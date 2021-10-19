@@ -1,0 +1,21 @@
+name: Build
+on:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '0/5 * * * 1-5'
+
+jobs:
+  build:
+    name: Check for release
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: 'legleux/rippled'
+
+      - name: Get last latest tag
+        id: latest-tag
+        run: echo '::set-output name=TAG::$(git describe --abbrev=0 --tags)'
+
+      - name: Show last tag
+        run: echo "The last tag is ${{ steps.latest-tag.outputs.TAG }}"
