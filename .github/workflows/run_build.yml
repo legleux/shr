@@ -23,7 +23,7 @@ jobs:
       - name: Get last latest tag
         id: latest-tag
         run: |
-          TAG=$(git describe --abbrev=0 --tags)
+          cd rippled && TAG=$(git describe --abbrev=0 --tags)
           echo "::set-output name=TAG::$TAG"
           echo "::set-output name=OTHER::someoutput"
 
